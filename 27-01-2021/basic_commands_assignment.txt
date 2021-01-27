@@ -1,0 +1,150 @@
+➜  ~ ls   
+Desktop    index.html    myi3      production  Templates  walknext
+Documents  index.html.1  opt       Public      test
+Downloads  Music         Pictures  snap        Videos
+➜  ~ mkdir bd_training
+➜  ~ cd bd_training 
+➜  bd_training cd ..         
+➜  ~ ll
+total 156K
+drwxrwxr-x  2 hari hari 4.0K Jan 27 16:20 bd_training
+drwxr-xr-x  3 hari hari 4.0K Dec 29 17:47 Desktop
+drwxr-xr-x  2 hari hari 4.0K Sep 23 15:04 Documents
+drwxr-xr-x  2 hari hari  12K Jan 27 11:33 Downloads
+-rw-rw-r--  1 hari hari  42K Dec  8 20:24 index.html
+-rw-rw-r--  1 hari hari  42K Dec  8 20:34 index.html.1
+drwxr-xr-x  2 hari hari 4.0K Sep 23 15:04 Music
+drwxrwxr-x  6 hari hari 4.0K Sep 23 14:18 myi3
+drwxrwxr-x  3 hari hari 4.0K Sep 23 14:22 opt
+drwxr-xr-x  2 hari hari 4.0K Sep 28 21:10 Pictures
+drwxr-xr-x 12 hari hari 4.0K Nov 23 10:51 production
+drwxr-xr-x  2 hari hari 4.0K Sep 23 15:04 Public
+drwxr-xr-x  7 hari hari 4.0K Jan 27 14:23 snap
+drwxr-xr-x  2 hari hari 4.0K Sep 23 15:04 Templates
+drwxrwxr-x  2 hari hari 4.0K Oct  8 16:52 test
+drwxr-xr-x  2 hari hari 4.0K Sep 23 15:04 Videos
+drwxrwxr-x  2 hari hari 4.0K Dec 29 17:48 walknext
+➜  ~ cd bd_training 
+➜  bd_training touch README.md 
+➜  bd_training ll
+total 0
+-rw-rw-r-- 1 hari hari 0 Jan 27 16:23 README.md
+➜  bd_training chmod 777 README.md                   
+➜  bd_training ll
+total 0
+-rwxrwxrwx 1 hari hari 0 Jan 27 16:23 README.md
+➜  bd_training vim README.md      
+➜  bd_training ls -a
+.  ..  README.md
+➜  bd_training touch .example.pw
+➜  bd_training ls -a
+.  ..  .example.pw  README.md
+➜  bd_training sudo -i
+root@hari-Inspiron-3585:~# ls
+snap
+root@hari-Inspiron-3585:~# ll
+total 56
+drwx------  8 root root 4096 Jan  8 11:15 ./
+drwxr-xr-x 20 root root 4096 Sep 23 13:59 ../
+-rw-------  1 root root  104 Jan 27 15:47 .bash_history
+-rw-r--r--  1 root root 3106 Dec  5  2019 .bashrc
+drwx------  4 root root 4096 Nov  9 14:12 .cache/
+drwx------  3 root root 4096 Sep 23 17:55 .config/
+drwx------  3 root root 4096 Sep 27 16:47 .dbus/
+drwx------  3 root root 4096 Sep 27 16:47 .local/
+-rw-r--r--  1 root root  161 Dec  5  2019 .profile
+drwxr-xr-x  4 root root 4096 Nov 25 10:32 snap/
+drwxr-xr-x  2 root root 4096 Jan  8 11:13 .vim/
+-rw-------  1 root root 9529 Jan  8 11:15 .viminfo
+root@hari-Inspiron-3585:~# exit
+logout
+➜  bd_training ping www.google.com         
+PING www.google.com (172.217.169.4) 56(84) bytes of data.
+64 bytes from lhr25s26-in-f4.1e100.net (172.217.169.4): icmp_seq=1 ttl=116 time=21.0 ms
+64 bytes from lhr25s26-in-f4.1e100.net (172.217.169.4): icmp_seq=2 ttl=116 time=22.3 ms
+64 bytes from lhr25s26-in-f4.1e100.net (172.217.169.4): icmp_seq=3 ttl=116 time=19.2 ms
+^C
+--- www.google.com ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 19.167/20.851/22.343/1.303 ms
+➜  bd_training mv .example.pw /home/hari 
+➜  bd_training cp /home/hari/.example.pw .           
+➜  bd_training ll   
+total 4.0K
+-rwxrwxrwx 1 hari hari 9 Jan 27 16:24 README.md
+➜  bd_training cp /home/hari/.example.pw /           
+cp: cannot create regular file '/.example.pw': Permission denied
+➜  bd_training cp /home/hari/.example.pw ./          
+➜  bd_training ll
+total 4.0K
+-rwxrwxrwx 1 hari hari 9 Jan 27 16:24 README.md
+➜  bd_training ll -a
+total 12K
+drwxrwxr-x  2 hari hari 4.0K Jan 27 16:31 .
+drwxr-xr-x 35 hari hari 4.0K Jan 27 16:32 ..
+-rw-rw-r--  1 hari hari    0 Jan 27 16:32 .example.pw
+-rwxrwxrwx  1 hari hari    9 Jan 27 16:24 README.md
+➜  bd_training rm .example.pw 
+➜  bd_training ll -a
+total 12K
+drwxrwxr-x  2 hari hari 4.0K Jan 27 16:33 .
+drwxr-xr-x 35 hari hari 4.0K Jan 27 16:33 ..
+-rwxrwxrwx  1 hari hari    9 Jan 27 16:24 README.md
+➜  bd_training pwd                
+/home/hari/bd_training
+➜  bd_training ll   
+total 4.0K
+-rwxrwxrwx 1 hari hari 9 Jan 27 16:24 README.md
+➜  bd_training touch 01272021_assignment.txt
+➜  bd_training ll
+total 4.0K
+-rw-rw-r-- 1 hari hari 0 Jan 27 16:34 01272021_assignment.txt
+-rwxrwxrwx 1 hari hari 9 Jan 27 16:24 README.md
+➜  bd_training  cat README.md              
+Training
+➜  bd_training tail -n 1                    
+^C
+➜  bd_training tail -n README.md
+tail: invalid number of lines: ‘README.md’
+➜  bd_training tail -n 1 README.md 
+Training
+➜  bd_training vim README.md 
+➜  bd_training tail -n 2 README.md
+Line 5
+
+➜  bd_training head -n 2 README.md
+Training
+Line 2
+➜  bd_training jobs            
+➜  bd_training ll -a
+total 12K
+drwxrwxr-x  3 hari hari 4.0K Jan 27 17:20 .
+drwxr-xr-x 35 hari hari 4.0K Jan 27 17:24 ..
+drwxrwxr-x  3 hari hari 4.0K Jan 27 17:23 27-01-2021
+➜  bd_training touch file1.txt              
+➜  bd_training mkdir file2.txt          
+➜  bd_training mv file1.txt file3.txt
+➜  bd_training ll   
+total 8.0K
+drwxrwxr-x 3 hari hari 4.0K Jan 27 17:23 27-01-2021
+drwxrwxr-x 2 hari hari 4.0K Jan 27 17:25 file2.txt
+-rw-rw-r-- 1 hari hari    0 Jan 27 17:25 file3.txt
+➜  bd_training mkdir file5           
+➜  bd_training ll
+total 12K
+drwxrwxr-x 3 hari hari 4.0K Jan 27 17:23 27-01-2021
+drwxrwxr-x 2 hari hari 4.0K Jan 27 17:25 file2.txt
+-rw-rw-r-- 1 hari hari    0 Jan 27 17:25 file3.txt
+drwxrwxr-x 2 hari hari 4.0K Jan 27 17:25 file5
+➜  bd_training rm file3.txt  
+➜  bd_training rm -r file5 
+➜  bd_training ll
+total 8.0K
+drwxrwxr-x 3 hari hari 4.0K Jan 27 17:23 27-01-2021
+drwxrwxr-x 2 hari hari 4.0K Jan 27 17:25 file2.txt
+➜  bd_training rm -r file2.txt 
+➜  bd_training ll
+total 4.0K
+drwxrwxr-x 3 hari hari 4.0K Jan 27 17:23 27-01-2021
+➜  bd_training 
+
