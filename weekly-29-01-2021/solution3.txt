@@ -1,0 +1,46 @@
+# Write "SQL" statement to select data from "tab1" that are not exists in "tab2" without using "NOT" keyword.
+
+mysql> SELECT * FROM tab1;
++------+
+| C1   |
++------+
+| A    |
+| B    |
+| C    |
+| D    |
+| E    |
++------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM tab2;
++------+
+| C1   |
++------+
+| A    |
+| C    |
+| E    |
+| G    |
++------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT C1 
+    -> FROM tab1
+    -> WHERE (SELECT count(1) FROM tab2
+    -> WHERE tab2.C1 = tab1.C1) = 0;
++------+
+| C1   |
++------+
+| B    |
+| D    |
++------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT C1 FROM tab1 WHERE 1 > (SELECT count(*) FROM tab2 WHERE tab2.C1 = tab1.C1);
++------+
+| C1   |
++------+
+| B    |
+| D    |
++------+
+2 rows in set (0.00 sec)
+

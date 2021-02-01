@@ -1,0 +1,13 @@
+/* Write a SQL to generate all the date range for the transaction records */
+
+WITH d AS (
+SELECT trunc(min(tran_date),'MONTH') first_day,
+		last_day(max(tran_date)) - trunc(min(tran_date),'MONTH')+1 no_of_days
+FROM daily_tran),
+cd AS (SELECT first_day + LEVEL - 1 t_date
+FROM d
+CONNECT BY LEVEL <= no_of_days)
+SELECT t_date, tran_desc, nvl(tran_amount, 0) tran_amount
+FROM cd,daily_tran
+WHERE cd.t_date = daily_tran.tran_date(+)
+ORDER BY t_date;

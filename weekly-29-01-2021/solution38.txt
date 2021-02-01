@@ -1,0 +1,10 @@
+/* Write a SQL to get all the dates for the given "MONTH" and "YEAR". */
+
+WITH d AS (SELECT 'JAN' M, 2021 AS Y FROM dual),
+ds AS (SELECT to_date(M||Y,'MONYYYY') s_date,
+		last_day(to_date(M||Y,'MONYYYY')) l_date,
+		last_day(to_date(M||Y,'MONYYYY')) - to_date(M||Y,'MONYYYY') + 1 no_of_days	
+FROM d)
+SELECT s_date + LEVEL-1 cal_date
+FROM ds
+CONNECT BY LEVEL <= no_of_days;

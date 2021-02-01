@@ -1,0 +1,28 @@
+Write a SQL to print Cricket Dashboard
+
+
+WITH matches_played as (
+	SELECT team_name, COUNT(*) cnt from (
+	SELECT team_a team_name FROM CRICKET
+	UNION ALL
+	SELECT TEAM_B FROM CRICKET)
+	GROUP BY TEAM_NAME),
+     matches_won AS (SELECT WINNER, COUNT(*) cnt
+		FROM CRICKET	
+		GROUP BY WINNER)
+					
+SELECT team_name, 
+	matches_played.cnt played, 
+	matches_won.cnt won,
+	matches_played.cnt - matches_won.cnt loss
+FROM matches_played FULL OUTER JOIN matches_won
+	ON matches_played.team_name = matches_won.winner;
+
+Result:
+
+TEAM_NAME                       TOTAL	WON	LOST
+NEWZEALAND                    	2	0	2
+AUSTRALIA                     	5	3	2
+SRILANKA                      	7	2	5
+WESTINDIES                    	8	5	3
+INDIA                         	6	4	2

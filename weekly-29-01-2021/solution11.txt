@@ -1,0 +1,25 @@
+Write a SQL to print all the possible paths for the given cities.
+
+SQL> select * from cities;
+
+   CITY_ID CITY_NAME
+---------- --------------------
+	 1 Delhi
+	 2 Chennai
+	 3 Mumbai
+	 4 Kolkata
+
+SQL> select * from cities a, cities b
+  2  where a.city_name < b.city_name;
+
+   CITY_ID CITY_NAME		   CITY_ID CITY_NAME
+---------- -------------------- ---------- --------------------
+	 1 Delhi			 3 Mumbai
+	 1 Delhi			 4 Kolkata
+	 2 Chennai			 1 Delhi
+	 2 Chennai			 3 Mumbai
+	 2 Chennai			 4 Kolkata
+	 4 Kolkata			 3 Mumbai
+
+6 rows selected.
+

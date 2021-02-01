@@ -1,0 +1,18 @@
+/* Write a "SQL" to group the employees into teams 
+ * 1. Team members should be from same "CITY"
+ */
+
+WITH t AS (SELECT city,ename,
+		CEIL(row_number() over(PARTITION BY city ORDER BY rownum)/2) grp_no
+FROM team)
+SELECT city, LISTAGG(ename,',')  WITHIN GROUP(ORDER BY ename) team_names,
+		'Team - '||row_number() OVER(ORDER BY CITY) team_name
+FROM t
+GROUP BY city, grp_no;
+
+CITY	TEAM_MEMBERS	TEAM_NAME
+Delhi	Shyam,Ram	Team1
+Kolkata	Somen	        Team2
+Pune	Veda,Shruthi	Team3
+Pune	Apoorva,Karthik	Team4
+Pune	Jhon	        Team5

@@ -1,0 +1,24 @@
+# SQL to Find number of saturday and sunday in the current month
+
+
+SELECT
+    TO_CHAR(c_date,'DAY') day,
+    COUNT(*)
+FROM
+    (
+        SELECT trunc(SYSDATE,'MONTH') + ( level - 1 ) c_date
+        FROM dual
+        CONNECT BY level <= last_day(trunc(SYSDATE) ) - trunc(SYSDATE,'MONTH') + 1
+    )
+WHERE
+    TO_CHAR(c_date,'DY') IN ('SAT','SUN')
+GROUP BY
+    TO_CHAR(c_date,'DAY');
+
+
+Result:
+
+DAY	COUNT(*)
+SUNDAY   	5
+SATURDAY 	5
+

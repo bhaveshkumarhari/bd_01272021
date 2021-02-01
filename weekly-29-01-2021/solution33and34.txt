@@ -1,0 +1,16 @@
+/* The data of music chart is given in weekly order.
+   Write a SQL to summarize as given in expected output with
+   "No. of weeks played" and fist week of play.*/
+
+SELECT DISTINCT MIN(DATE_OF_CHART) OVER(PARTITION BY grp),
+		TITLE,
+		COUNT(*) OVER(PARTITION BY grp) cnt
+FROM (
+	SELECT DATE_OF_CHART, TITLE, t, c,
+			sum(c) over(ORDER BY DATE_OF_CHART) grp
+	FROM (SELECT DATE_OF_CHART, TITLE, 
+			nvl(lag(TITLE, 1) over(ORDER BY DATE_OF_CHART), TITLE) t,
+			CASE WHEN TITLE = nvl(lag(TITLE, 1) 
+				over(ORDER BY DATE_OF_CHART), TITLE||ARTIST) THEN 0 ELSE 1 END c
+		FROM TAB_CHART))
+ORDER BY 1;

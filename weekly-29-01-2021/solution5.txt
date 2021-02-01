@@ -1,0 +1,36 @@
+# Write a query to print number from 1.. to "n" numbers
+
+mysql> SELECT * FROM employee;
++--------+----------+-----------+------+--------+
+| emp_no | emp_name | job       | sal  | dep_no |
++--------+----------+-----------+------+--------+
+|      1 | john     | developer | 3000 |     10 |
+|      2 | Alex     | designer  | 2000 |     20 |
+|      3 | Salina   | HR        | 2500 |     30 |
+|      4 | Maya     | Manager   | 4500 |     40 |
+|      5 | Tina     | Manager   | 2300 |     40 |
+|      6 | Clark    | Developer | 4300 |     40 |
+|      7 | Blake    | Developer | 4300 |     30 |
+|      8 | Martin   | Analyst   | 6280 |     20 |
++--------+----------+-----------+------+--------+
+8 rows in set (0.00 sec)
+
+> SELECT row_num FROM employee where rownum<=6;
+
+> SELECT rownum, LEVEL
+	FROM dual
+	CONNECT BY LEVEL<=6;
+
+
++--------+
+| emp_no |
++--------+
+|      1 |
+|      2 |
+|      3 |
+|      4 |
+|      5 |
+|      6 |
++--------+
+6 rows in set (0.00 sec)
+

@@ -1,0 +1,8 @@
+/* Write "SQL" to convert "row of data" into "comma separted string" */
+
+SELECT DEPARTMENT_ID, LISTAGG(FIRST_NAME,',') WITHIN GROUP(ORDER BY FIRST_NAME)  
+FROM hr.EMPLOYEES
+GROUP BY DEPARTMENT_ID ;
+
+
+

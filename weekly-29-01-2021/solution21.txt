@@ -1,0 +1,14 @@
+/* Write a query to fill the missing date values */
+
+WITH d AS (SELECT min(dt) min, max(dt) max, max(dt) - min(dt) num
+FROM TX_DATA),
+
+d1 AS (select LEVEL-1 + min dt
+FROM d
+CONNECT BY LEVEL <=num+1)
+
+SELECT d1.dt, LAST_VALUE(amnt ignore nulls) over(ORDER BY d1.dt) amnt
+FROM d1 LEFT OUTER JOIN tx_data
+on (d1.dt = tx_data.dt)
+ORDER BY d1.dt;
+

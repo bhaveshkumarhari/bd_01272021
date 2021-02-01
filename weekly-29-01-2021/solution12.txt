@@ -1,0 +1,10 @@
+/* Write a SQL to list “no of employees” & “name of employees” reporting to each person */
+
+SELECT EMPLOYEE_ID, FIRST_NAME, names_of_rep, nvl(no_of_rep, 0) no_of_rep
+FROM HR.EMPLOYEES,
+			(SELECT manager_id, 
+				LISTAGG(FIRST_NAME,',') WITHIN GROUP(ORDER BY FIRST_NAME) names_of_rep,
+				COUNT(*) no_of_rep
+			FROM hr.EMPLOYEES
+			GROUP BY MANAGER_ID) r
+WHERE HR.EMPLOYEES.EMPLOYEE_ID = r.MANAGER_ID(+);

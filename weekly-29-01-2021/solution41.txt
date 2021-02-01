@@ -1,0 +1,15 @@
+/* Write a SQL to find the related group within hierarchical realtional data */
+
+WITH ds AS (
+		SELECT id FROM (
+		SELECT id, old_id, CONNECT_BY_ISLEAF l
+		FROM t1
+		CONNECT BY PRIOR old_id = id
+		START WITH id = 3)
+		WHERE l=1)
+SELECT id, old_id
+FROM t1
+CONNECT BY PRIOR id = old_id
+START WITH id = (SELECT id FROM ds);
+
+SELECT * FROM t1;

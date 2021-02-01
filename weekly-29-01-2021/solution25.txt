@@ -1,0 +1,21 @@
+/* Write a SQL to check whether the given SUDOKU is resolved or not */
+
+SELECT CASE when sum(DISTINCT col_sum) = 45 THEN 'CORRECT' ELSE 'INCORRECT' END FROM (
+SELECT column_name, column_val col_sum FROM (
+SELECT sum(c1) c1, sum(c2) c2, sum(c3) c3, sum(c4) c4, 
+		sum(c5) c5, sum(c6) c6, sum(c7) c7, sum(c8) c8, sum(c9) c9
+FROM sudoku)
+unpivot (column_val FOR column_name IN (c1,c2,c3,c4,c5,c6,c7,c8,c9))
+UNION all
+SELECT row_no, c1+c2+c3+c4+c5+c6+c7+c8+c9 row_sum
+FROM sudoku
+UNION all
+SELECT GRP||COLUMN_NAME group_name, COLUMN_VAL group_sum
+FROM (
+SELECT 'G'||CEIL(rownum/3) GRP,
+	sum(c1+c2+c3) G1,
+	sum(c4+c5+c6) G2,
+	sum(c7+c8+c9) G3
+FROM sudoku
+GROUP BY CEIL(rownum/3))
+unpivot (column_val FOR column_name IN (G1,G2,G3)));

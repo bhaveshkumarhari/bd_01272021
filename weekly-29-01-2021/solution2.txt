@@ -1,0 +1,28 @@
+# Write "SQL" Statement to select e,ployees getting salary greater than average salary of the department that are working in.
+
+mysql> SELECT * FROM employee;
++--------+----------+-----------+------+--------+
+| emp_no | emp_name | job       | sal  | dep_no |
++--------+----------+-----------+------+--------+
+|      1 | john     | developer | 3000 |     10 |
+|      2 | Alex     | designer  | 2000 |     20 |
+|      3 | Salina   | HR        | 2500 |     30 |
+|      4 | Maya     | Manager   | 4500 |     40 |
+|      5 | Tina     | Manager   | 2300 |     40 |
+|      6 | Clark    | Developer | 4300 |     40 |
+|      7 | Blake    | Developer | 4300 |     30 |
+|      8 | Martin   | Analyst   | 6280 |     20 |
++--------+----------+-----------+------+--------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT * FROM employee a WHERE a.sal > ( SELECT avg(b.sal) from employee b WHERE a.dep_no=b.dep_no);
++--------+----------+-----------+------+--------+
+| emp_no | emp_name | job       | sal  | dep_no |
++--------+----------+-----------+------+--------+
+|      4 | Maya     | Manager   | 4500 |     40 |
+|      6 | Clark    | Developer | 4300 |     40 |
+|      7 | Blake    | Developer | 4300 |     30 |
+|      8 | Martin   | Analyst   | 6280 |     20 |
++--------+----------+-----------+------+--------+
+4 rows in set (0.00 sec)
+

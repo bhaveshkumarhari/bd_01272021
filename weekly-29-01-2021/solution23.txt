@@ -1,0 +1,9 @@
+/* Write a query to print the sequence of numbers from the given range of data */
+
+SELECT r FROM (
+SELECT start_range, end_range
+FROM t) t1,
+(SELECT rownum r
+FROM dual
+CONNECT BY LEVEL <= (SELECT max(end_range) FROM t)) t2
+WHERE t2.r >= start_range AND t2.r <= end_range;

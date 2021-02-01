@@ -1,0 +1,38 @@
+/* Write an INSERT statement to insert the 
+- First and last records of Table1 and Table2
+- Second and Last but second row of Table1 into Table2
+- Continue the same logic to insert all records of Table1 into Table2
+*/
+
+INSERT INTO emp2
+WITH d AS (SELECT empno, ename,
+		round(count(1) over()/2) - ROW_NUMBER() OVER(ORDER BY empno) cnt
+FROM emp1),
+d1 AS (SELECT empno, ename, cnt FROM d WHERE cnt >= 0),
+d2 AS (SELECT empno, ename, abs(cnt) cnt FROM d WHERE cnt < 0)
+SELECT d1.empno, d1.ename, d2.empno, d2.ename
+FROM d1 LEFT OUTER JOIN d2 on d1.cnt = d2.cnt
+ORDER BY d1.empno;
+
+SELECT * FROM emp2;
+
+
+EMPNO1	ENAME1	EMPNO2	ENAME2
+1	KING	11	SIVA
+2	BLAKE	10	MARTIN
+3	CLARK	9	WARD
+4	JONES	8	ALLEN
+5	SCOTT	7	SMITH
+6	FORD	 - 	 - 
+1	KING	11	SIVA
+2	BLAKE	10	MARTIN
+3	CLARK	9	WARD
+4	JONES	8	ALLEN
+5	SCOTT	7	SMITH
+6	FORD	 - 	 - 
+
+
+
+
+
+

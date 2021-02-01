@@ -1,0 +1,82 @@
+# Write a query to select the rows that have "A" in any one of the columns without using "OR" keyword.
+
+mysql> CREATE TABLE tab1(s_no INTEGER, col1 VARCHAR(1), col2 VARCHAR(1),
+col3 VARCHAR(1), col4 VARCHAR(1), col5 VARCHAR(1));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> SHOW FULL TABLES;
++----------------------------+------------+
+| Tables_in_sakila           | Table_type |
++----------------------------+------------+
+| Persons                    | BASE TABLE |
+| actor                      | BASE TABLE |
+| actor_info                 | VIEW       |
+| address                    | BASE TABLE |
+| category                   | BASE TABLE |
+| city                       | BASE TABLE |
+| country                    | BASE TABLE |
+| customer                   | BASE TABLE |
+| customer_list              | VIEW       |
+| film                       | BASE TABLE |
+| film_actor                 | BASE TABLE |
+| film_category              | BASE TABLE |
+| film_list                  | VIEW       |
+| film_text                  | BASE TABLE |
+| inventory                  | BASE TABLE |
+| language                   | BASE TABLE |
+| nicer_but_slower_film_list | VIEW       |
+| payment                    | BASE TABLE |
+| rental                     | BASE TABLE |
+| sales_by_film_category     | VIEW       |
+| sales_by_store             | VIEW       |
+| staff                      | BASE TABLE |
+| staff_list                 | VIEW       |
+| store                      | BASE TABLE |
+| tab1                       | BASE TABLE |
++----------------------------+------------+
+25 rows in set (0.00 sec)
+
+mysql> SELECT * FROM tab1;
+Empty set (0.00 sec)
+
+mysql> INSERT INTO tab1(s_no, col1, col2, col3, col4, col5) VALUES (1,'A','B','C','D','E')
+    -> ;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO tab1(s_no, col1, col2, col3, col4, col5) VALUES (1,'NULL','B','A','D','E');
+ERROR 1406 (22001): Data too long for column 'col1' at row 1
+mysql> INSERT INTO tab1(s_no, col1, col2, col3, col4, col5) VALUES (1,'P','B','A','D','E');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO tab1(s_no, col1, col2, col3, col4, col5) VALUES (1,'P','B','Q','D','A');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO tab1(s_no, col1, col2, col3, col4, col5) VALUES (1,'P','B','Q','D','M');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO tab1(s_no, col1, col2, col3, col4, col5) VALUES (1,'P','B','Q','A','M');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM tab1;
++------+------+------+------+------+------+
+| s_no | col1 | col2 | col3 | col4 | col5 |
++------+------+------+------+------+------+
+|    1 | A    | B    | C    | D    | E    |
+|    1 | P    | B    | A    | D    | E    |
+|    1 | P    | B    | Q    | D    | A    |
+|    1 | P    | B    | Q    | D    | M    |
+|    1 | P    | B    | Q    | A    | M    |
++------+------+------+------+------+------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM tab1 WHERE 'A' in (col1, col2, col3, col4, col5);
++------+------+------+------+------+------+
+| s_no | col1 | col2 | col3 | col4 | col5 |
++------+------+------+------+------+------+
+|    1 | A    | B    | C    | D    | E    |
+|    1 | P    | B    | A    | D    | E    |
+|    1 | P    | B    | Q    | D    | A    |
+|    1 | P    | B    | Q    | A    | M    |
++------+------+------+------+------+------+
+4 rows in set (0.00 sec)
+

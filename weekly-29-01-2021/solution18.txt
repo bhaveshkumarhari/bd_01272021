@@ -1,0 +1,12 @@
+/* Sort the "character" in the given string */
+
+WITH t AS (SELECT 'WELCOME' d
+FROM dual)
+SELECT LISTAGG(s) WITHIN GROUP (ORDER BY s)
+FROM (
+SELECT substr(d, LEVEL,1) s
+FROM t
+CONNECT BY LEVEL <= length(d));
+
+Result:
+CEELMOW
