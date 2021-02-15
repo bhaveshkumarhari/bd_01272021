@@ -10,12 +10,13 @@ sqoop list-databases \
 --password mystore
 
 
-sqoop import 
---connect jdbc:postgresql://localhost/store \ 
+sqoop import \ 
+--connect jdbc:postgresql://localhost/store \
 --username postgres \
 --password mystore \
 --table contacts \
 --target-dir /user/hadoop/input/postgres/store
+
 
 
 Oracle:
@@ -28,12 +29,14 @@ sqoop list-databases \
 --password mystore
 
 
-sqoop import 
---connect jdbc:oracle:thin:@//localhost/xe \ 
+sqoop import  \
+--connect jdbc:oracle:thin:@//localhost/xe \
 --username store \
 --password mystore \
 --table customers --columns "customer_id, name, address" --m=1 \
 --target-dir /user/hadoop/input/oracle/store
+
+
 
 MySQL
 
@@ -50,5 +53,7 @@ sqoop import \
 --username root \
 --password root \
 --table contacts \
---target-dir //user/hadoop/input/mysql/store
+--target-dir /user/hadoop/input/mysql/store 
+
+
 

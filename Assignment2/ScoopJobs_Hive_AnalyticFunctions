@@ -1,0 +1,324 @@
+
+1. Cleanup the existing use case files from HDFS.
+
+hdfs dfs -ls /user/hadoop/input/store/
+hdfs dfs -rm -r /user/hadoop/input/store/customers
+
+---------------------------------------------------------------------------------------------------
+
+2. Create the sqoop jobs and run the sqoop jobs to import all the tables from Sql databases to HDFS.
+
+To see available databases in mysql
+
+sqoop list-databases \
+--connect jdbc:mysql://localhost:3306 \
+--username root \
+--password root
+
+
+To create job for single table from database(store)
+
+Customers:
+
+sqoop job --create job_for_customers -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table customers -m 1 --target-dir /user/hadoop/input/store/customers
+
+sqoop job --exec job_for_customers
+
+
+Contacts:
+
+sqoop job --create job_for_contacts -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table contacts -m 1 --target-dir /user/hadoop/input/store/contacts
+
+sqoop job --exec job_for_contacts
+
+
+Orders:
+
+sqoop job --create job_for_orders -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table orders -m 1 --target-dir /user/hadoop/input/store/orders
+
+sqoop job --exec job_for_orders
+
+
+Employees:
+
+sqoop job --create job_for_employees -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table employees -m 1 --target-dir /user/hadoop/input/store/employees
+
+sqoop job --exec job_for_employees
+
+
+
+sqoop job --list
+sqoop job --delete myjob
+
+
+To import all table from database
+
+sqoop import-all-tables --connect "jdbc:mysql://localhost/store" --username root --password root
+$HADOOP_HOME/bin/hadoop fs -ls
+
+-------------------------------------------------------------
+
+3. Create Hive external tables on top of these directories.
+
+Customers:
+
+create external table customers(customer_id int,name string,address string,website string,credit_limit int)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/customers';
+
+Contacts:
+
+create external table contacts(contact_id int,first_name string,last_name string,email string,phone string,customer_id int)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/contacts';
+
+Orders:
+
+create external table orders(order_id int,customer_id int,status string,salesman_id int,order_date date)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/orders';
+
+Employees:
+
+create external table employees(employee_id int,first_name string,last_name string,email string,phone string,hire_date date,manager_id int,job_title string)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/employees';
+
+Details about table:
+
+desc formatted table_name;
+
+--------------------------------------------------------------------------------------------------------------
+
+4. Use HQL(Hive Query Language) script to transform the data from Hive external tables to Hive internal tables.
+
+Storing following queries to hivescript.hql
+
+create database hivedb;
+
+use hivedb;
+
+create table emp(id int,name string,sal int,gender string, dno int);
+
+insert into emp values(1,"John",2500,"Male",101);
+insert into emp values(2,"Juli",3000,"Female",102);
+insert into emp values(3,"Rolly",4500,"Female",103);
+insert into emp values(4,"Mark",1500,"Male",104);
+insert into emp values(5,"Polly",3500,"Female",105);
+
+select * from emp where gender="Female";
+
+Run command:
+
+hive -f hivescript.hql
+
+--------------------------------------------------
+
+Storing following queries to hive_rank_script.hql
+
+create database hivedb;
+
+use hivedb;
+
+create table emp(id int,name string,sal int,gender string, dno int);
+
+insert into emp values(1,"John",2500,"Male",101);
+insert into emp values(2,"Juli",3000,"Female",102);
+insert into emp values(3,"Rolly",4500,"Female",103);
+insert into emp values(4,"Mark",1500,"Male",104);
+insert into emp values(5,"Polly",3500,"Female",105);
+
+SELECT dno, id, name, gender, sal,
+                RANK() OVER (ORDER BY sal) AS row_rank
+FROM emp;
+
+Run command:
+
+hive -f hivescript.hql
+
+desc formatted table_name;
+
+--------------------------------------------------------------------------------------------------
+
+5. Practice Sql analytical functions and document it for Rank, Dense_Rank, Lag, and Lead functions.
+
+RANK Function:
+
+SELECT DEPARTMENT_ID, EMPLOYEE_ID, FIRST_NAME, SALARY,
+		RANK() OVER (ORDER BY SALARY) AS row_rank
+FROM EMPLOYEES;
+
+Result:
+
+50	132	TJ	2100	1
+50	128	Steven	2200	2
+50	136	Hazel	2200	2
+50	127	James	2400	4
+50	135	Ki	2400	4
+30	119	Karen	2500	6
+50	131	James	2500	6
+50	140	Joshua	2500	6
+50	144	Peter	2500	6
+50	182	Martha	2500	6
+
+DENSE_RANK Function:
+
+SELECT DEPARTMENT_ID, EMPLOYEE_ID, FIRST_NAME, SALARY,
+		DENSE_RANK() OVER (ORDER BY SALARY) AS row_rank
+FROM EMPLOYEES;
+
+Result:
+
+50	132	TJ	2100	1
+50	128	Steven	2200	2
+50	136	Hazel	2200	2
+50	127	James	2400	3
+50	135	Ki	2400	3
+30	119	Karen	2500	4
+50	131	James	2500	4
+50	140	Joshua	2500	4
+50	144	Peter	2500	4
+50	182	Martha	2500	4
+
+ROW_NUMBER Function:
+
+SELECT DEPARTMENT_ID, EMPLOYEE_ID, FIRST_NAME, SALARY,
+		ROW_NUMBER() OVER (ORDER BY SALARY, HIRE_DATE) AS row_rank
+FROM EMPLOYEES;
+
+Result:
+
+50	132	TJ	2100	1
+50	136	Hazel	2200	2
+50	128	Steven	2200	3
+50	127	James	2400	4
+50	135	Ki	2400	5
+50	131	James	2500	6
+50	140	Joshua	2500	7
+50	144	Peter	2500	8
+50	182	Martha	2500	9
+30	119	Karen	2500	10
+
+RANK Function Partition by department_id:
+
+SELECT DEPARTMENT_ID, EMPLOYEE_ID, FIRST_NAME, SALARY,
+		RANK() OVER (PARTITION BY DEPARTMENT_ID ORDER BY SALARY) AS row_rank
+FROM EMPLOYEES;
+
+Result:
+
+10	200	Jennifer	4400	1
+20	202	Pat		6000	1
+20	201	Michael	13000	2
+30	119	Karen		2500	1
+30	118	Guy		2600	2
+30	117	Sigal		2800	3
+30	116	Shelli		2900	4
+30	115	Alexander	3100	5
+30	114	Den		11000	6
+40	203	Susan		6500	1
+50	132	TJ		2100	1
+
+RANK Function for lowest paid employee per department:
+
+SELECT *
+FROM (SELECT DEPARTMENT_ID, EMPLOYEE_ID, FIRST_NAME, SALARY,
+		RANK() OVER (PARTITION BY DEPARTMENT_ID ORDER BY SALARY) AS row_rank
+		FROM EMPLOYEES)
+WHERE row_rank = 1;
+
+Result:
+
+10	200	Jennifer	4400	1
+20	202	Pat		6000	1
+30	119	Karen		2500	1
+40	203	Susan		6500	1
+50	132	TJ		2100	1
+60	107	Diana		4200	1
+70	204	Hermann	10000	1
+80	173	Sundita	6100	1
+90	101	Neena		17000	1
+90	102	Lex		17000	1
+
+LAG Function:
+
+SELECT EMPLOYEE_ID, FIRST_NAME, JOB_ID, SALARY, 
+		LAG(SALARY, 1, 0) OVER (ORDER BY SALARY) AS prev_sal
+FROM EMPLOYEES;
+
+Result:
+
+132	TJ	ST_CLERK	2100	0
+128	Steven	ST_CLERK	2200	2100
+136	Hazel	ST_CLERK	2200	2200
+127	James	ST_CLERK	2400	2200
+135	Ki	ST_CLERK	2400	2400
+119	Karen	PU_CLERK	2500	2400
+131	James	ST_CLERK	2500	2500
+140	Joshua	ST_CLERK	2500	2500
+144	Peter	ST_CLERK	2500	2500
+
+LAG Function Partition by department_id:
+
+SELECT DEPARTMENT_ID, EMPLOYEE_ID, FIRST_NAME, JOB_ID, SALARY, 
+		LAG(SALARY, 1, 0) OVER (PARTITION BY DEPARTMENT_ID ORDER BY SALARY) AS prev_sal
+FROM EMPLOYEES;
+
+Result:
+
+10	200	Jennifer	AD_ASST	4400	0
+20	202	Pat		MK_REP		6000	0
+20	201	Michael	MK_MAN		13000	6000
+30	119	Karen		PU_CLERK	2500	0
+30	118	Guy		PU_CLERK	2600	2500
+30	117	Sigal		PU_CLERK	2800	2600
+30	116	Shelli		PU_CLERK	2900	2800
+30	115	Alexander	PU_CLERK	3100	2900
+30	114	Den		PU_MAN		11000	3100
+40	203	Susan		HR_REP		6500	0
+
+LEAD Function with difference between two salary:
+
+SELECT DEPARTMENT_ID, EMPLOYEE_ID, FIRST_NAME, JOB_ID, SALARY, 
+		LEAD(SALARY, 1, 0) OVER (ORDER BY SALARY) AS next_sal,
+		LEAD(SALARY, 1, 0) OVER (ORDER BY SALARY) - SALARY AS diff_sal
+FROM EMPLOYEES;
+
+Result:
+
+50	132	TJ	ST_CLERK	2100	2200	100
+50	128	Steven	ST_CLERK	2200	2200	0
+50	136	Hazel	ST_CLERK	2200	2400	200
+50	127	James	ST_CLERK	2400	2400	0
+50	135	Ki	ST_CLERK	2400	2500	100
+30	119	Karen	PU_CLERK	2500	2500	0
+50	131	James	ST_CLERK	2500	2500	0
+50	140	Joshua	ST_CLERK	2500	2500	0
+50	144	Peter	ST_CLERK	2500	2500	0
+50	182	Martha	SH_CLERK	2500	2500	0
+
+LEAD Function Partition by department_id:
+
+SELECT DEPARTMENT_ID, EMPLOYEE_ID, FIRST_NAME, JOB_ID, SALARY, 
+		LEAD(SALARY, 1, 0) OVER (PARTITION BY DEPARTMENT_ID ORDER BY SALARY) AS next_sal
+FROM EMPLOYEES;
+
+Result:
+
+10	200	Jennifer	AD_ASST	4400	0
+20	202	Pat		MK_REP		6000	13000
+20	201	Michael	MK_MAN		13000	0
+30	119	Karen		PU_CLERK	2500	2600
+30	118	Guy		PU_CLERK	2600	2800
+30	117	Sigal		PU_CLERK	2800	2900
+30	116	Shelli		PU_CLERK	2900	3100
+30	115	Alexander	PU_CLERK	3100	11000
+30	114	Den		PU_MAN		11000	0
+40	203	Susan		HR_REP		6500	0
+50	132	TJ		ST_CLERK	2100	2200
+
+
