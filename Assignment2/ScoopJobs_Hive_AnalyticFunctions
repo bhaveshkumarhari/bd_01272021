@@ -1,8 +1,8 @@
 
 1. Cleanup the existing use case files from HDFS.
 
-hdfs dfs -ls /user/hadoop/input/store/
-hdfs dfs -rm -r /user/hadoop/input/store/customers
+hdfs dfs -ls /user/hadoop/input/store/mysql/
+hdfs dfs -rm -r /user/hadoop/input/store/mysql/customers
 
 ---------------------------------------------------------------------------------------------------
 
@@ -18,33 +18,38 @@ sqoop list-databases \
 
 To create job for single table from database(store)
 
-Customers:
+Contacts(Postgres):
 
-sqoop job --create job_for_customers -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table customers -m 1 --target-dir /user/hadoop/input/store/customers
+sqoop job --create postgres_contacts -- import --connect "jdbc:postgresql://localhost/store" --username postgres --password mystore --table contacts -m 1 --target-dir /user/hadoop/input/store/postgres/contacts
 
-sqoop job --exec job_for_customers
+sqoop job --exec postgres_contacts
+
+Customers(MySQL):
+
+sqoop job --create mysql_customers -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table customers -m 1 --target-dir /user/hadoop/input/store/mysql/customers
+
+sqoop job --exec mysql_customers
 
 
-Contacts:
+Contacts(MySQL):
 
 sqoop job --create job_for_contacts -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table contacts -m 1 --target-dir /user/hadoop/input/store/contacts
 
 sqoop job --exec job_for_contacts
 
 
-Orders:
+Orders(MySQL):
 
 sqoop job --create job_for_orders -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table orders -m 1 --target-dir /user/hadoop/input/store/orders
 
 sqoop job --exec job_for_orders
 
 
-Employees:
+Employees(MySQL):
 
-sqoop job --create job_for_employees -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table employees -m 1 --target-dir /user/hadoop/input/store/employees
+sqoop job --create mysql_employees -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table employees -m 1 --target-dir /user/hadoop/input/store/mysql/employees
 
-sqoop job --exec job_for_employees
-
+sqoop job --exec mysql_employees
 
 
 sqoop job --list
@@ -60,33 +65,42 @@ $HADOOP_HOME/bin/hadoop fs -ls
 
 3. Create Hive external tables on top of these directories.
 
-Customers:
+Contacts(Postgres):
+
+create external table contacts(contact_id int,first_name string,last_name string,email string,phone string,customer_id int)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/postgres/contacts';
+
+
+Customers(MySQL):
 
 create external table customers(customer_id int,name string,address string,website string,credit_limit int)
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 location '/user/hadoop/input/store/customers';
 
-Contacts:
+Contacts(MySQL):
 
 create external table contacts(contact_id int,first_name string,last_name string,email string,phone string,customer_id int)
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 location '/user/hadoop/input/store/contacts';
 
-Orders:
+Orders(MySQL):
 
 create external table orders(order_id int,customer_id int,status string,salesman_id int,order_date date)
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 location '/user/hadoop/input/store/orders';
 
-Employees:
+Employees(MySQL):
 
 create external table employees(employee_id int,first_name string,last_name string,email string,phone string,hire_date date,manager_id int,job_title string)
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
-location '/user/hadoop/input/store/employees';
+location '/user/hadoop/input/store/mysql/employees';
+
 
 Details about table:
 
