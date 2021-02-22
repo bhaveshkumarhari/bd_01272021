@@ -1,0 +1,253 @@
+1. Creating tables and storing data among RDBMS:
+
+MySQL:
+
+Customers:
+
+CREATE TABLE customers
+  (
+    customer_id INT PRIMARY KEY,
+    name         VARCHAR(255) NOT NULL,
+    address      VARCHAR(255),
+    website      VARCHAR(255),
+    credit_limit INT
+  );
+  
+Insert into store.customers (CUSTOMER_ID,NAME,ADDRESS,CREDIT_LIMIT,WEBSITE) values (1,'Raytheon','514 W Superior St, Kokomo, IN',100,'http://www.raytheon.com');
+Insert into store.customers (CUSTOMER_ID,NAME,ADDRESS,CREDIT_LIMIT,WEBSITE) values (2,'Plains GP Holdings','2515 Bloyd Ave, Indianapolis, IN',100,'http://www.plainsallamerican.com');
+Insert into store.customers (CUSTOMER_ID,NAME,ADDRESS,CREDIT_LIMIT,WEBSITE) values (3,'US Foods Holding','8768 N State Rd 37, Bloomington, IN',100,'http://www.usfoods.com');
+Insert into store.customers (CUSTOMER_ID,NAME,ADDRESS,CREDIT_LIMIT,WEBSITE) values (4,'AbbVie','6445 Bay Harbor Ln, Indianapolis, IN',100,'http://www.abbvie.com');
+Insert into store.customers (CUSTOMER_ID,NAME,ADDRESS,CREDIT_LIMIT,WEBSITE) values (5,'Centene','4019 W 3Rd St, Bloomington, IN',100,'http://www.centene.com');
+Insert into store.customers (CUSTOMER_ID,NAME,ADDRESS,CREDIT_LIMIT,WEBSITE) values (6,'Community Health Systems','1608 Portage Ave, South Bend, IN',100,'http://www.chs.net');
+Insert into store.customers (CUSTOMER_ID,NAME,ADDRESS,CREDIT_LIMIT,WEBSITE) values (7,'Alcoa','23943 Us Highway 33, Elkhart, IN',100,'http://www.alcoa.com');
+Insert into store.customers (CUSTOMER_ID,NAME,ADDRESS,CREDIT_LIMIT,WEBSITE) values (8,'International Paper','136 E Market St # 800, Indianapolis, IN',100,'http://www.internationalpaper.com');
+Insert into store.customers (CUSTOMER_ID,NAME,ADDRESS,CREDIT_LIMIT,WEBSITE) values (9,'Emerson Electric','1905 College St, South Bend, IN',100,'http://www.emerson.com');
+Insert into store.customers (CUSTOMER_ID,NAME,ADDRESS,CREDIT_LIMIT,WEBSITE) values (10,'Union Pacific','3512 Rockville Rd # 137C, Indianapolis, IN',200,'http://www.up.com');
+
+Contacts:
+
+CREATE TABLE contacts
+  (
+    contact_id INT PRIMARY KEY,
+    first_name  VARCHAR(255) NOT NULL,
+    last_name   VARCHAR(255) NOT NULL,
+    email       VARCHAR(255) NOT NULL,
+    phone       VARCHAR(20),
+    customer_id INT
+  );
+  
+Insert into contacts (CONTACT_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,CUSTOMER_ID) values (1,'Flor','Stone','flor.stone@raytheon.com','+1 317 123 4104',1);
+Insert into contacts (CONTACT_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,CUSTOMER_ID) values (2,'Lavera','Emerson','lavera.emerson@plainsallamerican.com','+1 317 123 4111',2);
+Insert into contacts (CONTACT_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,CUSTOMER_ID) values (3,'Fern','Head','fern.head@usfoods.com','+1 812 123 4115',3);
+Insert into contacts (CONTACT_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,CUSTOMER_ID) values (4,'Shyla','Ortiz','shyla.ortiz@abbvie.com','+1 317 123 4126',4);
+Insert into contacts (CONTACT_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,CUSTOMER_ID) values (5,'Jeni','Levy','jeni.levy@centene.com','+1 812 123 4129',5);
+Insert into contacts (CONTACT_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,CUSTOMER_ID) values (6,'Matthias','Hannah','matthias.hannah@chs.net','+1 219 123 4136',6);
+Insert into contacts (CONTACT_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,CUSTOMER_ID) values (7,'Matthias','Cruise','matthias.cruise@alcoa.com','+1 219 123 4138',7);
+Insert into contacts (CONTACT_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,CUSTOMER_ID) values (8,'Meenakshi','Mason','meenakshi.mason@internationalpaper.com','+1 317 123 4141',8);
+Insert into contacts (CONTACT_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,CUSTOMER_ID) values (9,'Christian','Cage','christian.cage@emerson.com','+1 219 123 4142',9);
+Insert into contacts (CONTACT_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,CUSTOMER_ID) values (10,'Charlie','Sutherland','charlie.sutherland@up.com','+1 317 123 4146',10);
+
+Orders:
+
+CREATE TABLE orders
+  (
+    order_id INT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    status      VARCHAR(20) NOT NULL,
+    salesman_id INT,
+    order_date  DATE NOT NULL
+  );
+  
+Insert into orders (ORDER_ID,CUSTOMER_ID,STATUS,SALESMAN_ID,ORDER_DATE) values (94,1,'Shipped',11,'2017-10-27');
+Insert into orders (ORDER_ID,CUSTOMER_ID,STATUS,SALESMAN_ID,ORDER_DATE) values (79,2,'Shipped',11,'2018-09-21');
+Insert into orders (ORDER_ID,CUSTOMER_ID,STATUS,SALESMAN_ID,ORDER_DATE) values (80,3,'Shipped',10,'2020-09-13');
+Insert into orders (ORDER_ID,CUSTOMER_ID,STATUS,SALESMAN_ID,ORDER_DATE) values (2,4,'Shipped',1,'2018-12-24');
+Insert into orders (ORDER_ID,CUSTOMER_ID,STATUS,SALESMAN_ID,ORDER_DATE) values (3,5,'Shipped',2,'2019-02-16');
+Insert into orders (ORDER_ID,CUSTOMER_ID,STATUS,SALESMAN_ID,ORDER_DATE) values (6,6,'Shipped',3,'2021-08-03');
+Insert into orders (ORDER_ID,CUSTOMER_ID,STATUS,SALESMAN_ID,ORDER_DATE) values (7,7,'Shipped',3,'2017-06-09');
+Insert into orders (ORDER_ID,CUSTOMER_ID,STATUS,SALESMAN_ID,ORDER_DATE) values (8,8,'Shipped',1,'2016-12-11');
+Insert into orders (ORDER_ID,CUSTOMER_ID,STATUS,SALESMAN_ID,ORDER_DATE) values (9,9,'Shipped',2,'2016-05-15');
+Insert into orders (ORDER_ID,CUSTOMER_ID,STATUS,SALESMAN_ID,ORDER_DATE) values (10,8,'Pending',2,'2015-11-19');
+
+
+Employees:
+  
+ CREATE TABLE employees
+  (
+    employee_id INT PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name  VARCHAR(255) NOT NULL,
+    email      VARCHAR(255) NOT NULL,
+    phone      VARCHAR(50) NOT NULL ,
+    hire_date  DATE NOT NULL,
+    manager_id INT,
+    job_title  VARCHAR(255) NOT NULL
+  );
+  
+Insert into employees (EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,MANAGER_ID,JOB_TITLE) values (107,'Summer','Payne','summer.payne@example.com','515.123.8181','2017-10-27',101,'Public Accountant');
+Insert into employees (EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,MANAGER_ID,JOB_TITLE) values (106,'Rose','Stephens','rose.stephens@example.com','515.123.8080','2020-09-13',2,'Accounting Manager');
+Insert into employees (EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,MANAGER_ID,JOB_TITLE) values (101,'Annabelle','Dunn','annabelle.dunn@example.com','515.123.4444','2018-10-14',2,'Administration Assistant');
+Insert into employees (EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,MANAGER_ID,JOB_TITLE) values (1,'Tommy','Bailey','tommy.bailey@example.com','515.123.4567','2020-10-13',null,'President');
+Insert into employees (EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,MANAGER_ID,JOB_TITLE) values (3,'Blake','Cooper','blake.cooper@example.com','515.123.4569','2019-02-16',1,'Administration Vice President');
+Insert into employees (EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,MANAGER_ID,JOB_TITLE) values (2,'Jude','Rivera','jude.rivera@example.com','515.123.4568','2021-01-26',1,'Administration Vice President');
+Insert into employees (EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,MANAGER_ID,JOB_TITLE) values (11,'Tyler','Ramirez','tyler.ramirez@example.com','515.124.4269','2016-12-11',3,'Accountant');
+Insert into employees (EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,MANAGER_ID,JOB_TITLE) values (10,'Ryan','Gray','ryan.gray@example.com','515.124.4169','207-09-16',3,'Accountant');
+Insert into employees (EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,MANAGER_ID,JOB_TITLE) values (14,'Elliot','Brooks','elliot.brooks@example.com','515.124.4567','2015-11-19',3,'Accountant');
+Insert into employees (EMPLOYEE_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,HIRE_DATE,MANAGER_ID,JOB_TITLE) values (12,'Elliott','James','elliott.james@example.com','515.124.4369','2017-01-13',3,'Accountant');
+  
+PosgreSQL:
+
+Order Items:
+
+CREATE TABLE order_items
+  (
+    order_id   INT,
+    item_id    INT,
+    product_id INT NOT NULL,
+    quantity   INT NOT NULL,
+    unit_price INT NOT NULL,
+    CONSTRAINT pk_order_items 
+      PRIMARY KEY( order_id, item_id )
+  );
+  
+insert into order_items (ORDER_ID,ITEM_ID,PRODUCT_ID,QUANTITY,UNIT_PRICE) values (2,9,248,75,620.95);
+insert into order_items (ORDER_ID,ITEM_ID,PRODUCT_ID,QUANTITY,UNIT_PRICE) values (3,8,228,116,799);
+insert into order_items (ORDER_ID,ITEM_ID,PRODUCT_ID,QUANTITY,UNIT_PRICE) values (6,7,249,119,680.99);
+insert into order_items (ORDER_ID,ITEM_ID,PRODUCT_ID,QUANTITY,UNIT_PRICE) values (8,9,45,148,47.88);
+insert into order_items (ORDER_ID,ITEM_ID,PRODUCT_ID,QUANTITY,UNIT_PRICE) values (9,1,46,111,298.98);
+insert into order_items (ORDER_ID,ITEM_ID,PRODUCT_ID,QUANTITY,UNIT_PRICE) values (94,1,47,111,66.89);
+insert into order_items (ORDER_ID,ITEM_ID,PRODUCT_ID,QUANTITY,UNIT_PRICE) values (79,1,51,47,149.88);
+insert into order_items (ORDER_ID,ITEM_ID,PRODUCT_ID,QUANTITY,UNIT_PRICE) values (80,1,91,70,282.98);
+insert into order_items (ORDER_ID,ITEM_ID,PRODUCT_ID,QUANTITY,UNIT_PRICE) values (10,1,92,67,647.99);
+insert into order_items (ORDER_ID,ITEM_ID,PRODUCT_ID,QUANTITY,UNIT_PRICE) values (7,1,2,74,305);
+
+
+Products:
+
+CREATE TABLE products
+(
+	product_id INT PRIMARY KEY,
+	product_name  VARCHAR(255) NOT NULL,
+	description   VARCHAR(2000),
+	standard_cost INT,
+	list_price    INT,
+	category_id   INT
+);
+
+Insert into products (PRODUCT_ID,PRODUCT_NAME,DESCRIPTION,STANDARD_COST,LIST_PRICE,CATEGORY_ID) values (228,'Intel Xeon E5-2699 V3 (OEM/Tray)','Speed:2.3GHz Cores:18 TDP:145W',2867.51,3410.46,1);
+Insert into products (PRODUCT_ID,PRODUCT_NAME,DESCRIPTION,STANDARD_COST,LIST_PRICE,CATEGORY_ID) values (248,'Intel Xeon E5-2697 V3','Speed:2.6GHz Cores:14 TDP:145W',2326.27,2774.98,1);
+Insert into products (PRODUCT_ID,PRODUCT_NAME,DESCRIPTION,STANDARD_COST,LIST_PRICE,CATEGORY_ID) values (249,'Intel Xeon E5-2698 V3 (OEM/Tray)','Speed:2.3GHz Cores:16 TDP:135W',2035.18,2660.72,1);
+Insert into products (PRODUCT_ID,PRODUCT_NAME,DESCRIPTION,STANDARD_COST,LIST_PRICE,CATEGORY_ID) values (2,'Intel Xeon E5-2697 V4','Speed:2.3GHz Cores:18 TDP:145W',2144.4,2554.99,1);
+Insert into products (PRODUCT_ID,PRODUCT_NAME,DESCRIPTION,STANDARD_COST,LIST_PRICE,CATEGORY_ID) values (45,'Intel Xeon E5-2685 V3 (OEM/Tray)','Speed:2.6GHz Cores:12 TDP:120W',2012.11,2501.69,1);
+Insert into products (PRODUCT_ID,PRODUCT_NAME,DESCRIPTION,STANDARD_COST,LIST_PRICE,CATEGORY_ID) values (46,'Intel Xeon E5-2695 V3 (OEM/Tray)','Speed:2.3GHz Cores:14 TDP:120W',1925.13,2431.95,1);
+Insert into products (PRODUCT_ID,PRODUCT_NAME,DESCRIPTION,STANDARD_COST,LIST_PRICE,CATEGORY_ID) values (47,'Intel Xeon E5-2697 V2','Speed:2.7GHz Cores:12 TDP:130W',2101.59,2377.09,1);
+Insert into products (PRODUCT_ID,PRODUCT_NAME,DESCRIPTION,STANDARD_COST,LIST_PRICE,CATEGORY_ID) values (51,'Intel Xeon E5-2695 V4','Speed:2.1GHz Cores:18 TDP:120W',1780.35,2269.99,1);
+Insert into products (PRODUCT_ID,PRODUCT_NAME,DESCRIPTION,STANDARD_COST,LIST_PRICE,CATEGORY_ID) values (91,'Intel Xeon E5-2695 V2','Speed:2.4GHz Cores:12 TDP:115W',1793.53,2259.99,1);
+Insert into products (PRODUCT_ID,PRODUCT_NAME,DESCRIPTION,STANDARD_COST,LIST_PRICE,CATEGORY_ID) values (92,'Intel Xeon E5-2643 V2 (OEM/Tray)','Speed:3.5GHz Cores:6 TDP:130W',1940.18,2200,1);
+
+Product Categories:
+
+CREATE TABLE product_categories
+  (
+    category_id INT PRIMARY KEY,
+    category_name VARCHAR( 255 ) NOT NULL
+  );
+  
+Insert into product_categories (CATEGORY_ID,CATEGORY_NAME) values (1,'CPU');
+Insert into product_categories (CATEGORY_ID,CATEGORY_NAME) values (2,'Video Card');
+Insert into product_categories (CATEGORY_ID,CATEGORY_NAME) values (3,'RAM');
+Insert into product_categories (CATEGORY_ID,CATEGORY_NAME) values (4,'Mother Board');
+Insert into product_categories (CATEGORY_ID,CATEGORY_NAME) values (5,'Storage');
+
+Inventories:
+
+CREATE TABLE inventories
+  (
+    product_id   INT,
+    warehouse_id INT,
+    quantity     INT NOT NULL,
+    CONSTRAINT pk_inventories 
+      PRIMARY KEY( product_id, warehouse_id )
+  );
+  
+Insert into inventories (PRODUCT_ID,WAREHOUSE_ID,QUANTITY) values (228,8,122);
+Insert into inventories (PRODUCT_ID,WAREHOUSE_ID,QUANTITY) values (248,8,123);
+Insert into inventories (PRODUCT_ID,WAREHOUSE_ID,QUANTITY) values (249,8,123);
+Insert into inventories (PRODUCT_ID,WAREHOUSE_ID,QUANTITY) values (2,8,124);
+Insert into inventories (PRODUCT_ID,WAREHOUSE_ID,QUANTITY) values (45,8,125);
+Insert into inventories (PRODUCT_ID,WAREHOUSE_ID,QUANTITY) values (46,8,125);
+Insert into inventories (PRODUCT_ID,WAREHOUSE_ID,QUANTITY) values (47,8,126);
+Insert into inventories (PRODUCT_ID,WAREHOUSE_ID,QUANTITY) values (51,8,149);
+Insert into inventories (PRODUCT_ID,WAREHOUSE_ID,QUANTITY) values (91,8,150);
+Insert into inventories (PRODUCT_ID,WAREHOUSE_ID,QUANTITY) values (92,8,150);
+
+
+Oracle:
+
+Warehouses:
+
+CREATE TABLE warehouses
+  (
+    warehouse_id NUMBER PRIMARY KEY,
+    warehouse_name VARCHAR(255),
+    location_id    NUMBER
+  );
+  
+Insert into STORE.WAREHOUSES (WAREHOUSE_ID,WAREHOUSE_NAME,LOCATION_ID) values (1,'Southlake Texas',5);
+Insert into STORE.WAREHOUSES (WAREHOUSE_ID,WAREHOUSE_NAME,LOCATION_ID) values (2,'San Francisco',6);
+Insert into STORE.WAREHOUSES (WAREHOUSE_ID,WAREHOUSE_NAME,LOCATION_ID) values (3,'New Jersey',7);
+Insert into STORE.WAREHOUSES (WAREHOUSE_ID,WAREHOUSE_NAME,LOCATION_ID) values (4,'Seattle Washington',8);
+Insert into STORE.WAREHOUSES (WAREHOUSE_ID,WAREHOUSE_NAME,LOCATION_ID) values (5,'Toronto',9);
+Insert into STORE.WAREHOUSES (WAREHOUSE_ID,WAREHOUSE_NAME,LOCATION_ID) values (6,'Sydney',4);
+Insert into STORE.WAREHOUSES (WAREHOUSE_ID,WAREHOUSE_NAME,LOCATION_ID) values (7,'Mexico City',3);
+Insert into STORE.WAREHOUSES (WAREHOUSE_ID,WAREHOUSE_NAME,LOCATION_ID) values (8,'Beijing',3);
+Insert into STORE.WAREHOUSES (WAREHOUSE_ID,WAREHOUSE_NAME,LOCATION_ID) values (9,'Bombay',1);
+
+
+Locations:
+
+CREATE TABLE locations
+  (
+    location_id NUMBER PRIMARY KEY,
+    address     VARCHAR2(255) NOT NULL,
+    postal_code VARCHAR2(20),
+    city        VARCHAR2(50),
+    state       VARCHAR2(50),
+    country  	VARCHAR2(50)          
+  );
+  
+Insert into STORE.LOCATIONS (LOCATION_ID,ADDRESS,POSTAL_CODE,CITY,STATE,COUNTRY) values (1,'1297 Via Cola di Rie','00989','Roma','Abruzzo','Italy');
+Insert into STORE.LOCATIONS (LOCATION_ID,ADDRESS,POSTAL_CODE,CITY,STATE,COUNTRY) values (2,'93091 Calle della Testa','10934','Venice','Basilicata','Italy');
+Insert into STORE.LOCATIONS (LOCATION_ID,ADDRESS,POSTAL_CODE,CITY,STATE,COUNTRY) values (3,'2017 Shinjuku-ku','1689','Tokyo','Tokyo Prefecture','Japan');
+Insert into STORE.LOCATIONS (LOCATION_ID,ADDRESS,POSTAL_CODE,CITY,STATE,COUNTRY) values (4,'9450 Kamiya-cho','6823','Hiroshima','Tokyo Prefecture','Japan');
+Insert into STORE.LOCATIONS (LOCATION_ID,ADDRESS,POSTAL_CODE,CITY,STATE,COUNTRY) values (5,'2014 Jabberwocky Rd','26192','Southlake','Texas','USA');
+Insert into STORE.LOCATIONS (LOCATION_ID,ADDRESS,POSTAL_CODE,CITY,STATE,COUNTRY) values (6,'2011 Interiors Blvd','99236','South San Francisco','California','USA');
+Insert into STORE.LOCATIONS (LOCATION_ID,ADDRESS,POSTAL_CODE,CITY,STATE,COUNTRY) values (7,'2007 Zagora St','50090','South Brunswick','New Jersey','USA');
+Insert into STORE.LOCATIONS (LOCATION_ID,ADDRESS,POSTAL_CODE,CITY,STATE,COUNTRY) values (8,'2004 Charade Rd','98199','Seattle','Washington','USA');
+Insert into STORE.LOCATIONS (LOCATION_ID,ADDRESS,POSTAL_CODE,CITY,STATE,COUNTRY) values (9,'147 Spadina Ave','M5V 2L7','Toronto','Ontario','Canada');
+Insert into STORE.LOCATIONS (LOCATION_ID,ADDRESS,POSTAL_CODE,CITY,STATE,COUNTRY) values (10,'6092 Boxwood St','YSW 9T2','Whitehorse','Yukon','Canada');
+
+
+--------------------------------------------------------------------------------------------------------
+
+2. Check databases among RDBMS using SQOOP:
+
+MySQL:
+
+sqoop list-databases \
+--connect jdbc:mysql://localhost:3306 \
+--username root \
+--password root
+  
+  
+PosgreSQL:
+
+sqoop list-databases \           
+--connect jdbc:postgresql://localhost/store \
+--username postgres \
+--password root
+
+
+Oracle:
+
+sqoop list-databases --connect jdbc:oracle:thin:@//localhost/xe --username store --password root

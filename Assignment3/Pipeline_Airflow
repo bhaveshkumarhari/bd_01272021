@@ -1,0 +1,211 @@
+1. Sqoop jobs to ingest data from RDBMS's to HDFS
+
+PostgreSQL:
+
+sqoop job --create order_items_postgres -- import --connect "jdbc:postgresql://localhost/store" --username postgres --password root --table order_items --columns "order_id, item_id, product_id, quantity, unit_price" -m 1 --target-dir /user/hadoop/input/store/postgres/order_items
+
+sqoop job --exec order_items_postgres
+
+sqoop job --create products_postgres -- import --connect "jdbc:postgresql://localhost/store" --username postgres --password root --table products --columns "product_id, product_name, description, standard_cost, list_price, category_id" -m 1 --target-dir /user/hadoop/input/store/postgres/products
+
+sqoop job --exec products_postgres
+
+sqoop job --create product_categories_postgres -- import --connect "jdbc:postgresql://localhost/store" --username postgres --password root --table product_categories --columns "category_id, category_name" -m 1 --target-dir /user/hadoop/input/store/postgres/product_categories
+
+sqoop job --exec product_categories_postgres
+
+sqoop job --create inventories_postgres -- import --connect "jdbc:postgresql://localhost/store" --username postgres --password root --table inventories --columns "product_id, warehouse_id, quantity" -m 1 --target-dir /user/hadoop/input/store/postgres/inventories
+
+sqoop job --exec inventories_postgres
+
+MySQL:
+
+sqoop job --create customers_mysql -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table customers --columns "customer_id, name, address, website, credit_limit" -m 1 --target-dir /user/hadoop/input/store/mysql/customers
+
+sqoop job --exec customers_mysql
+
+sqoop job --create contacts_mysql -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table contacts --columns "contact_id, first_name, last_name, email, phone, customer_id" -m 1 --target-dir /user/hadoop/input/store/mysql/contacts
+
+sqoop job --exec contacts_mysql
+
+sqoop job --create orders_mysql -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table orders --columns "order_id, customer_id, status, salesman_id, order_date" -m 1 --target-dir /user/hadoop/input/store/mysql/orders
+
+sqoop job --exec orders_mysql
+
+sqoop job --create employees_mysql -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table employees --columns "employee_id, first_name, last_name, email, phone, hire_date, manager_id, job_title" -m 1 --target-dir /user/hadoop/input/store/mysql/employees
+
+sqoop job --exec employees_mysql
+
+Oracle:
+
+sqoop job --create warehouses_oracle -- import --connect "jdbc:oracle:thin:@//localhost/xe" --username store --password root --table warehouses --columns "warehouse_id, warehouse_name, location_id" --m=1 --target-dir /user/hadoop/input/store/oracle/warehouses
+
+sqoop job --exec warehouses_oracle
+
+sqoop job --create locations_oracle -- import --connect "jdbc:oracle:thin:@//localhost/xe" --username store --password root --table locations --columns "location_id, address, postal_code, city, state, country" --m=1 --target-dir /user/hadoop/input/store/oracle/locations
+
+sqoop job --exec locations_oracle
+
+
+sqoop job --list
+sqoop job --delete myjob
+
+2. Create Hive external tables on top the ingested files:
+
+Customers:
+
+create external table customers(customer_id int,customer_name string,customer_address string,customer_website string,credit_limit int)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/mysql/customers';
+
+Contacts:
+
+create external table contacts(contact_id int,first_name string,last_name string,email string,phone string,customer_id int)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/mysql/contacts';
+
+Orders:
+
+create external table orders(order_id int,customer_id int,status string,salesman_id int,order_date date)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/mysql/orders';
+
+Employees:
+
+create external table employees(employee_id int,first_name string,last_name string,email string,phone string,hire_date date,manager_id int,job_title string)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/mysql/employees';
+
+Order Items:
+
+create external table order_items(order_id int,item_id int,product_id int,quantity int,unit_price int)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/postgres/order_items';
+
+Products:
+
+create external table products(product_id int,product_name string,description string,standard_cost int,list_price int,category_id int)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/postgres/products';
+
+Product Categories:
+
+create external table product_categories(category_id int,category_name string)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/postgres/product_categories';
+
+Inventories:
+
+create external table inventories(product_id int,warehouse_id int,quantity int)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/postgres/inventories';
+
+Warehouses:
+
+create external table warehouses(warehouse_id int,warehouse_name string,location_id int)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/oracle/warehouses';
+
+Locations:
+
+create external table locations(location_id int,address string,postal_code string,city string,state string,country string)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location '/user/hadoop/input/store/oracle/locations';
+
+
+3. Move data from Hive external tables to Hive internal tables (Available in Hbase tables also):
+
+Customers:
+
+create table customers_hbase(customer_id int,customer_name string,customer_address string,customer_website string,credit_limit int)
+stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+with serdeproperties("hbase.columns.mapping"=":key,x:customer_name,x:customer_address,x:customer_website,x:credit_limit");
+
+INSERT OVERWRITE TABLE customers_hbase SELECT * FROM customers;
+
+Contacts:
+
+create table contacts_hbase(contact_id int,first_name string,last_name string,email string,phone string,customer_id int)
+stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+with serdeproperties("hbase.columns.mapping"=":key,x:first_name,x:last_name,x:email,x:phone,x:customer_id");
+
+INSERT OVERWRITE TABLE contacts_hbase SELECT * FROM contacts;
+
+Orders:
+
+create table orders_hbase(order_id int,customer_id int,status string,salesman_id int,order_date date)
+stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+with serdeproperties("hbase.columns.mapping"=":key,x:customer_id,x:status,x:salesman_id,x:order_date");
+
+INSERT OVERWRITE TABLE orders_hbase SELECT * FROM orders;
+
+Employees:
+
+create table employees_hbase(employee_id int,first_name string,last_name string,email string,phone string,hire_date date,manager_id int,job_title string)
+stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+with serdeproperties("hbase.columns.mapping"=":key,x:first_name,x:last_name,x:email,x:phone,x:hire_date,x:manager_id,x:job_title");
+
+INSERT OVERWRITE TABLE employees_hbase SELECT * FROM employees;
+
+Order Items:
+
+create table order_items_hbase(order_id int,item_id int,product_id int,quantity int,unit_price int)
+stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+with serdeproperties("hbase.columns.mapping"=":key,x:item_id,x:product_id,x:quantity,x:unit_price");
+
+INSERT OVERWRITE TABLE order_items_hbase SELECT * FROM order_items;
+
+Products:
+
+create table products_hbase(product_id int,product_name string,description string,standard_cost int,list_price int,category_id int)
+stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+with serdeproperties("hbase.columns.mapping"=":key,x:product_name,x:description,x:standard_cost,x:list_price,x:category_id");
+
+INSERT OVERWRITE TABLE products_hbase SELECT * FROM products;
+
+Products Categories:
+
+create table product_categories_hbase(category_id int,category_name string)
+stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+with serdeproperties("hbase.columns.mapping"=":key,x:category_name");
+
+INSERT OVERWRITE TABLE product_categories_hbase SELECT * FROM product_categories;
+
+Inventories:
+
+create table inventories_hbase(product_id int,warehouse_id int,quantity int)
+stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+with serdeproperties("hbase.columns.mapping"=":key,x:warehouse_id,x:quantity");
+
+INSERT OVERWRITE TABLE inventories_hbase SELECT * FROM inventories;
+
+Warehouses:
+
+create table warehouses_hbase(warehouse_id int,warehouse_name string,location_id int)
+stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+with serdeproperties("hbase.columns.mapping"=":key,x:warehouse_name,x:location_id");
+
+INSERT OVERWRITE TABLE warehouses_hbase SELECT * FROM warehouses;
+
+Locations:
+
+create table locations_hbase(location_id int,address string,postal_code string,city string,state string,country string)
+stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+with serdeproperties("hbase.columns.mapping"=":key,x:address,x:postal_code,x:city,x:state,x:country");
+
+INSERT OVERWRITE TABLE locations_hbase SELECT * FROM locations;
+
+
+
+
+

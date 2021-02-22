@@ -33,14 +33,14 @@ sqoop job --exec mysql_customers
 
 Contacts(MySQL):
 
-sqoop job --create job_for_contacts -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table contacts -m 1 --target-dir /user/hadoop/input/store/contacts
+sqoop job --create job_for_contacts -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table contacts -m 1 --target-dir /user/hadoop/input/store/mysql/contacts
 
 sqoop job --exec job_for_contacts
 
 
 Orders(MySQL):
 
-sqoop job --create job_for_orders -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table orders -m 1 --target-dir /user/hadoop/input/store/orders
+sqoop job --create job_for_orders -- import --connect "jdbc:mysql://localhost/store" --username root --password root --table orders -m 1 --target-dir /user/hadoop/input/store/mysql/orders
 
 sqoop job --exec job_for_orders
 
@@ -78,21 +78,21 @@ Customers(MySQL):
 create external table customers(customer_id int,name string,address string,website string,credit_limit int)
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
-location '/user/hadoop/input/store/customers';
+location '/user/hadoop/input/store/mysql/customers';
 
 Contacts(MySQL):
 
 create external table contacts(contact_id int,first_name string,last_name string,email string,phone string,customer_id int)
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
-location '/user/hadoop/input/store/contacts';
+location '/user/hadoop/input/store/mysql/contacts';
 
 Orders(MySQL):
 
 create external table orders(order_id int,customer_id int,status string,salesman_id int,order_date date)
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
-location '/user/hadoop/input/store/orders';
+location '/user/hadoop/input/store/mysql/orders';
 
 Employees(MySQL):
 
