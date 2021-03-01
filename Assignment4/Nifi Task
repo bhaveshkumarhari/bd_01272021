@@ -1,0 +1,25 @@
+Nifi task
+----------
+1. FTP a file from remote server to your local server.
+
+ftp <ip address>
+
+lcd /home/hari/TAE/test/input
+
+get example.csv
+
+2. Move it to HDFS
+
+Within Nifi using GetFile and PutHDFS processors transfered all the data from /home/hari/TAE/test/input to HDFS.
+
+3. Move this data from HDFS to mysql/postgres/mssql/hive external database
+
+Hive:
+
+create external table sales(region string,country string,item_type string,sales_channel string,order_priority string,order_date string,order_id string,ship_date string,units_sold string,unit_price string,unit_cost string,total_revenue string,total_cost string,total_profit string)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ',';
+
+load data  inpath '/user/hadoop/input/nifidata/' into table sales;
+
+select * from sales;
