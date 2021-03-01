@@ -25,9 +25,11 @@ spark = SparkSession\
 #MySQL
 #----------------------------
 
+# List for MySQL tables
 mysql_tables = ['customers','contacts','orders','employees']
 
 for table in mysql_tables:
+    # This is to connect with RDBMS
     rdbms_df = spark.read \
         .format("jdbc") \
         .option('url', 'jdbc:mysql://localhost/store') \
@@ -41,6 +43,7 @@ for table in mysql_tables:
 
     df=spark.sql(""" select * from temp_tab """)
 
+    # This is to ingest data from RDBMS to HDFS as csv file
     df.write.format("csv").mode("overwrite").save(f"hdfs://localhost:9000/user/spark/input/store/mysql/{table}")
 
 
@@ -48,17 +51,19 @@ for table in mysql_tables:
 #MySQL - Customers
 #----------------------------
 
+# This is to create external table from HDFS location
 spark.sql(""" create external table store.customers_ext(customer_id int,name string,address string,website string,credit_limit int)
                             ROW FORMAT DELIMITED
                             FIELDS TERMINATED BY ','
                             location '/user/spark/input/store/mysql/customers' """)
 
-# This is for aggregation
+# This is for aggregation from external table
 agg_customers_df=spark.sql(""" SELECT * FROM store.customers_ext WHERE credit_limit < 200 """)
 
 # This is for creating internal table with aggregation
 agg_customers_df.write.format("orc").mode("overwrite").saveAsTable("store.customers_int")
 
+# Send Aggregated data back to RDBMS
 agg_customers_df.select("customer_id","name", "address", "website", "credit_limit").write.format("jdbc") \
   .mode("overwrite") \
   .option("url", 'jdbc:mysql://localhost/store_output') \
