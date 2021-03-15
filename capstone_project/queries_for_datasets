@@ -1,0 +1,5 @@
+CREATE TABLE country_details (id INT AUTO_INCREMENT PRIMARY KEY, country VARCHAR(255), country_code VARCHAR(255), confirmed_cases INT, today_cases INT,deaths INT,today_deaths INT,recovered INT,today_recovered INT,critical INT,total_tests INT);
+
+CREATE TABLE usa_details (id INT AUTO_INCREMENT PRIMARY KEY, state VARCHAR(255), confirmed_cases INT, today_cases INT,deaths INT,today_deaths INT,recovered INT,total_tests INT);
+
+CREATE TABLE usa_timeseries (id INT AUTO_INCREMENT PRIMARY KEY, date DATE, confirmed_cases INT, deaths INT,recovered INT);
